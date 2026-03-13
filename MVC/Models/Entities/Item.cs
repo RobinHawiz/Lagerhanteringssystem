@@ -16,12 +16,14 @@ public class Item
     public string Description { get; set; } = "";
 
     [Column(TypeName = "decimal(10, 2)")]
+    [Display(Name = "Price (kr)")]
     public decimal Price { get; set; }
 
     [Range(0, int.MaxValue)]
     public int Amount { get; set; }
 
     // FK -> Category
+    [Display(Name = "Category")]
     public int CategoryId { get; set; }
 
     public Category? Category { get; set; }
