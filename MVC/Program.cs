@@ -1,8 +1,10 @@
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
 using MVC.Data;
 using MVC.Models;
 using MVC.Models.Entities;
+using System.Globalization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -91,7 +93,23 @@ builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
 
+var defaultDateCulture = "sv-SE";
+var culture = new CultureInfo(defaultDateCulture);
+culture.NumberFormat.NumberDecimalSeparator = ".";
 
+// Configure the Localization middleware
+app.UseRequestLocalization(new RequestLocalizationOptions
+{
+    DefaultRequestCulture = new RequestCulture(culture),
+    SupportedCultures = new List<CultureInfo>
+    {
+        culture,
+    },
+    SupportedUICultures = new List<CultureInfo>
+    {
+        culture,
+    }
+});
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
