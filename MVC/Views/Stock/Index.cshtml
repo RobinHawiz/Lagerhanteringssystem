@@ -1,0 +1,75 @@
+﻿@model IEnumerable<MVC.Models.Entities.Item>
+
+@{
+    ViewData["Title"] = "Stock";
+}
+
+<h1>Stock</h1>
+
+@if (TempData["SuccessMessage"] is string successMsg)
+{
+    <div class="alert alert-success">@successMsg</div>
+}
+
+@if (TempData["ErrorMessage"] is string errorMsg)
+{
+    <div class="alert alert-danger">@errorMsg</div>
+}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Price)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Amount)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Category)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Price)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Amount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Category.Name)
+            </td>
+            <td>
+                <form asp-action="Adjust" method="post" class="d-flex gap-2 align-items-center">
+                    <input type="hidden" name="ItemId" value="@item.Id" />
+
+                    <input type="number"
+                            name="Delta"
+                            class="form-control"
+                            style="width: 120px;"
+                            step="1"
+                            placeholder="+/-" />
+
+                    <button type="submit" class="btn btn-primary btn-sm">Adjust</button>
+                </form>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
