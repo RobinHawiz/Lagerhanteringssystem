@@ -1,8 +1,98 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+
+@{
+    ViewData["Title"] = "Home";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container py-4">
+
+    <div class="p-4 p-md-5 mb-4 bg-light rounded-3 border">
+        <h1 class="display-6 mb-2">Inventory Management System</h1>
+        <p class="lead mb-3">
+            Internal web app for managing items, categories, employees, and stock adjustments.
+        </p>
+
+        @if (SignInManager.IsSignedIn(User))
+        {
+            <p class="mb-0">
+                Signed in as <strong>@User.Identity?.Name</strong>
+            </p>
+        }
+        else
+        {
+            <p class="mb-0">
+                You are not signed in. Sign in to access protected features.
+            </p>
+        }
+    </div>
+
+    <div class="row g-3">
+
+        <div class="col-12 col-md-6 col-lg-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h5 class="mb-2">Items</h5>
+                    <p class="mb-3">Browse the item catalog.</p>
+                    <a class="btn btn-outline-primary" asp-controller="Items" asp-action="Index">Go to items</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-md-6 col-lg-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h5 class="mb-2">Employees</h5>
+                    <p class="mb-3">View the employee directory.</p>
+                    <a class="btn btn-outline-primary" asp-controller="Employees" asp-action="Index">Go to employees</a>
+                </div>
+            </div>
+        </div>
+
+        @if (User.IsInRole("Warehouse"))
+        {
+            <div class="col-12 col-md-6 col-lg-4">
+                <div class="card h-100 shadow-sm border border-primary">
+                    <div class="card-body">
+                        <h5 class="mb-2">Stock adjustments</h5>
+                        <p class="mb-3">Increase or decrease stock levels for items.</p>
+                        <a class="btn btn-primary" asp-controller="Stock" asp-action="Index">Open stock page</a>
+                    </div>
+                </div>
+            </div>
+        }
+
+        @if (User.IsInRole("Admin"))
+        {
+            <div class="col-12 col-md-6 col-lg-4">
+                <div class="card h-100 shadow-sm border border-dark">
+                    <div class="card-body">
+                        <h5 class="mb-2">Categories</h5>
+                        <p class="mb-3">Admin: manage item categories.</p>
+                        <a class="btn btn-dark" asp-controller="Categories" asp-action="Index">Manage categories</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-md-6 col-lg-4">
+                <div class="card h-100 shadow-sm border border-dark">
+                    <div class="card-body">
+                        <h5 class="mb-2">Admin shortcuts</h5>
+                        <p class="mb-3">Quick access to common admin actions.</p>
+                        <div class="d-flex flex-wrap gap-2">
+                            <a class="btn btn-outline-dark" asp-controller="Items" asp-action="Create">New item</a>
+                            <a class="btn btn-outline-dark" asp-controller="Employees" asp-action="Create">New employee</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    <hr class="my-4" />
+
+    <div class="text-muted small">
+        <div>Roles: <strong>Admin</strong> (full CRUD) and <strong>Warehouse</strong> (stock adjustments).</div>
+        <div>Public pages: items and employees (public).</div>
+    </div>
 </div>
